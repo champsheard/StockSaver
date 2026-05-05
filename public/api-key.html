@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate An Api Key</title>
+</head>
+<body>
+    <h1>Generate An API Key</h1>
+
+    <form id="apiForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <button type="submit">Generate API Key</button>
+    </form>
+
+    <p id="res"></p>
+
+    <script>
+        const form = document.getElementById("apiForm");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const username = document.getElementById("username").value;
+
+            try {
+                const response = await fetch('/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username })
+                });
+
+                const data = await response.json();
+
+                document.getElementById('res').textContent =
+                    `Your API Key: ${data.apiKey}`;
+
+            } catch (error) {
+                console.error('Error generating API key:', error);
+                document.getElementById('res').textContent =
+                    'Failed to generate API key.';
+            }
+        });
+    </script>
+</body>
+</html>
