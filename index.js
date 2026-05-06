@@ -13,7 +13,11 @@ app.use(cors({
 
 
 app.use(express.json());
-app.use(express.static('public'));
+
+
+if (process.env.VERCEL !== "1") {
+  app.use(express.static("public"));
+}
 
 
 
