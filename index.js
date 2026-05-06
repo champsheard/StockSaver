@@ -1,19 +1,22 @@
 const express = require('express');
 const app = express();
+const dotenv = require('dotenv').config();
 const cors = require('cors');
+
+
+
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'OPTIONS', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+
 app.use(express.json());
 app.use(express.static('public'));
 
 
 
-
-const dotenv = require('dotenv').config();
 
 const authRouter = require('./routes/authRoutes');
 app.use('/auth', authRouter);
