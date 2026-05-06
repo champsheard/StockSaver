@@ -1,8 +1,15 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'OPTIONS', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(express.json());
 app.use(express.static('public'));
+
 
 
 
@@ -14,6 +21,8 @@ app.use('/auth', authRouter);
 const watchlistRouter = require('./routes/watchlistRoutes');
 app.use('/watchlist', watchlistRouter);
 
+const stockRouter = require('./routes/stockRoutes');
+app.use('/stocks', stockRouter);
 
 app.get('/docs', (req, res) => {
     res.send('docs');
