@@ -2,9 +2,16 @@ const express = require('express');
 const app = express();
 const dotenv = require('dotenv').config();
 const cors = require('cors');
-const {marked} = require('marked');
 const fs = require('fs');
 const path = require('path');
+
+
+let marked;
+(async () => {
+  marked = (await import('marked')).marked;
+})();
+
+
 
 
 app.use(cors({
