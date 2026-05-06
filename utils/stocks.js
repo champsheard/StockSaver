@@ -1,28 +1,90 @@
 const YahooFinance = require('yahoo-finance2').default;
 
 const yahooFinance = new YahooFinance();
+const fs = require('fs');
+const path = require('path');
 
-// async function main() {
-//     try {
-//         const quote = await yahooFinance.quote('AAPL');
-//         const results = await yahooFinance.search('Apple');
-//         const history = await yahooFinance.historical('AAPL', {
-//             period1: '2024-01-01',
-//             period2: '2024-12-31'
-//         });
-//         const chart = await yahooFinance.chart('AAPL', { range: '1mo', interval: '1d' });
-//         // const history = await yahooFinance.historical('AAPL', {
-//         //     period1: '2024-01-01',
-//         //     period2: '2024-12-31'
-//         // });
+const filepath = path.join(__dirname, '../users.json');
 
-//         // console.log('Price:', quote.regularMarketPrice);
-//         // console.log('Search results:', results);
-//         console.log('Chart data:', chart);
-//         // console.log('History points:', history.length);
-//     } catch (err) {
-//         console.error('Error fetching stock data:', err);
-//     }
-// }
+const readDB = () => {
+    const rawData = fs.readFileSync(filepath, "utf-8");
+    return JSON.parse(rawData);
+};
 
-// main();
+// const writeDB = (db) => {
+//     fs.writeFileSync(filepath, JSON.stringify(db, null, 4), "utf-8");
+// };
+
+
+
+const validateTickers = async (tickers) => {
+    const valid = [];
+    const invalid = [];
+
+    for (let ticker of tickers) {
+        ticker = ticker.toUpperCase().trim();
+        if (!ticker) continue;
+
+        try {
+            const quote = await yahooFinance.quote(ticker);
+
+            if (quote && quote.regularMarketPrice !== null) {
+                valid.push(ticker);
+            } else {
+                invalid.push(ticker);
+            }
+
+        } catch (err) {
+            invalid.push(ticker);
+        }
+    }
+
+    return { valid, invalid };
+};
+
+
+const getWatchlistDataByApiKey = async (apiKey) => {
+    const db = readDB();
+    const user = db.users[apiKey];
+
+    if (!user) {
+        throw new Error("User not found");
+    }
+
+    const watchlist = user.watchlist || [];
+
+    const results = await Promise.allSettled(
+        watchlist.map(item => yahooFinance.quote(item.ticker))
+    );
+
+    const data = results.map((result, index) => {
+        const item = watchlist[index];
+        const shares = item.shares ?? 0;
+
+        if (result.status === "fulfilled") {
+            const quote = result.value;
+            const price = quote?.regularMarketPrice ?? 0;
+
+            return {
+                ticker: item.ticker,
+                shares,
+                price,
+                value: price * shares, // 💰 key addition
+                change: quote?.regularMarketChange ?? 0,
+                percentChange: quote?.regularMarketChangePercent ?? 0,
+                currency: quote?.currency ?? "USD"
+            };
+        } else {
+            return {
+                ticker: item.ticker,
+                shares,
+                error: "Failed to fetch data",
+                value: 0
+            };
+        }
+    });
+
+    return data;
+};
+
+module.exports = { validateTickers, getWatchlistDataByApiKey };

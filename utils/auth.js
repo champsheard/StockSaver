@@ -44,7 +44,7 @@ const getWatchlistByApiKey = (apiKey) => {
     return db.users[apiKey]?.watchlist || [];
 };
 
-const addToWatchlistByApiKey = (apiKey, tickers) => {
+const addToWatchlistByApiKey = (apiKey, items) => {
     const db = readDB();
 
     const user = db.users[apiKey];
@@ -52,17 +52,27 @@ const addToWatchlistByApiKey = (apiKey, tickers) => {
         throw new Error("User not found");
     }
 
-    const normalized = tickers
-        .map(t => t.toUpperCase().trim())
-        .filter(Boolean);
+    // Ensure items is array of {ticker, shares}
+    const normalizedItems = items.map(item => {
+        if (typeof item === 'string') {
+            return { ticker: item.toUpperCase().trim(), shares: 1 };
+        } else {
+            return { ticker: item.ticker.toUpperCase().trim(), shares: item.shares || 1 };
+        }
+    }).filter(item => item.ticker);
 
-    const set = new Set(user.watchlist);
+    // Use a map to merge shares for same ticker
+    const watchlistMap = new Map();
+    user.watchlist.forEach(item => {
+        watchlistMap.set(item.ticker, item.shares);
+    });
 
-    for (const ticker of normalized) {
-        set.add(ticker);
-    }
+    normalizedItems.forEach(item => {
+        const existingShares = watchlistMap.get(item.ticker) || 0;
+        watchlistMap.set(item.ticker, existingShares + item.shares);
+    });
 
-    user.watchlist = Array.from(set);
+    user.watchlist = Array.from(watchlistMap.entries()).map(([ticker, shares]) => ({ ticker, shares }));
 
     writeDB(db);
 
@@ -82,7 +92,7 @@ const removeFromWatchlistByApiKey = (apiKey, tickers) => {
         .filter(Boolean);
 
     user.watchlist = user.watchlist.filter(
-        t => !normalized.includes(t)
+        item => !normalized.includes(item.ticker)
     );
 
     writeDB(db);
