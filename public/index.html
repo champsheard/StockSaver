@@ -3,12 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StockSaver</title>
+    <title>StockSaver - Stock Tracking API</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+        }
+        header {
+            text-align: center;
+            padding: 50px 0;
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+        .feature {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .feature h3 {
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+        .cta {
+            text-align: center;
+            margin: 50px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #45a049;
+        }
+        .btn.secondary {
+            background: #2196F3;
+        }
+        .btn.secondary:hover {
+            background: #0b7dda;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0,0,0,0.2);
+            margin-top: auto;
+        }
+    </style>
 </head>
 <body>
-    <h1>StockSaver</h1>
-    <p>Welcome to StockSaver! This is a simple stock tracking api.</p>
-    <p><a href="/api-docs.html">API Documentation</a></p>
-    <p><a href="/api-key.html">Get An Api Key</a></p>
+    <div class="container">
+        <header>
+            <h1>📈 StockSaver</h1>
+            <p class="subtitle">Powerful Stock Tracking API for Developers</p>
+        </header>
+
+        <section class="features">
+            <div class="feature">
+                <h3>🚀 Real-time Data</h3>
+                <p>Get up-to-the-minute stock prices and market data using Yahoo Finance integration.</p>
+            </div>
+            <div class="feature">
+                <h3>📊 Watchlist Management</h3>
+                <p>Create and manage personalized stock watchlists with ease.</p>
+            </div>
+            <div class="feature">
+                <h3>🔐 Secure API</h3>
+                <p>Authenticate with API keys for secure access to your data.</p>
+            </div>
+            <div class="feature">
+                <h3>⚡ Fast & Reliable</h3>
+                <p>Built with Express.js for high performance and reliability.</p>
+            </div>
+        </section>
+
+        <section class="cta">
+            <a href="/api-key.html" class="btn">Get Your API Key</a>
+            <a href="/docs" class="btn secondary">View Documentation</a>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 StockSaver. Built for stock enthusiasts and developers.</p>
+    </footer>
 </body>
 </html>

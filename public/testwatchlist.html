@@ -1,58 +1,249 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <title>Watchlist API Tester</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockSaver API Demo - Interactive Tester</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            background: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            min-height: 100vh;
         }
-
-        input,
-        button {
-            padding: 10px;
-            font-size: 16px;
-            margin-top: 10px;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 3em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .subtitle {
+            text-align: center;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            font-size: 1.2em;
+        }
+        .api-key-section {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .api-key-section h2 {
+            margin-top: 0;
+            color: #fff;
+        }
+        .sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .section {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .section h3 {
+            margin-top: 0;
+            color: #fff;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        input, select {
             width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            background: rgba(255,255,255,0.9);
+            color: #333;
+            box-sizing: border-box;
         }
-
+        input:focus, select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3);
+        }
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
         button {
+            padding: 12px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.3s;
         }
-
+        button:hover {
+            background: #45a049;
+        }
+        button.secondary {
+            background: #2196F3;
+        }
+        button.secondary:hover {
+            background: #0b7dda;
+        }
+        button.danger {
+            background: #f44336;
+        }
+        button.danger:hover {
+            background: #d32f2f;
+        }
+        .response-section {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .response-section h3 {
+            margin-top: 0;
+        }
         pre {
-            background: #222;
-            color: #0f0;
-            padding: 15px;
-            margin-top: 20px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
             overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 40px;
+        }
+        .back-link a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+        .loading {
+            color: #ffd700;
+            font-style: italic;
+        }
+        .error {
+            color: #ff6b6b;
+        }
+        .success {
+            color: #4CAF50;
+        }
+        .note {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+        .note strong {
+            color: #ffd700;
         }
     </style>
 </head>
-
 <body>
+    <div class="container">
+        <h1>🧪 StockSaver API Demo</h1>
+        <p class="subtitle">Interactive tester for all StockSaver API endpoints</p>
 
-    <h2>Watchlist API Tester</h2>
+        <div class="api-key-section">
+            <h2>🔑 API Configuration</h2>
+            <div class="form-group">
+                <label for="apiKey">Your API Key:</label>
+                <input type="text" id="apiKey" placeholder="Enter your API key from the registration page">
+            </div>
+            <div class="form-group">
+                <label for="baseUrl">Base URL:</label>
+                <input type="text" id="baseUrl" value="http://localhost:3000">
+            </div>
+        </div>
 
-    <label>API Key:</label>
-    <input type="text" id="apiKey" placeholder="Enter your API key here">
+        <div class="sections">
+            <div class="section">
+                <h3>📊 Watchlist Operations</h3>
+                <div class="note">
+                    <strong>Note:</strong> All watchlist operations require authentication. Add tickers in format: TICKER:SHARES (e.g., AAPL:10, TSLA:5)
+                </div>
 
-    <label>Endpoint URL:</label>
-    <input type="text" id="endpoint" value="http://localhost:3000/watchlist/" />
+                <div class="button-group">
+                    <button onclick="getWatchlist()">📋 Get Watchlist</button>
+                    <button onclick="getWatchlistData()">📈 Get Data</button>
+                    <button onclick="getWatchlistAnalytics()">📊 Get Analytics</button>
+                </div>
 
-    <label>Tickers with Shares (format: TICKER:SHARES, e.g. AAPL:10, TSLA:5, MSFT):</label>
-    <input type="text" id="tickers" placeholder="e.g. AAPL:10, TSLA:5, MSFT">
+                <div class="form-group">
+                    <label for="watchlistTickers">Tickers for Add/Remove:</label>
+                    <input type="text" id="watchlistTickers" placeholder="e.g. AAPL:10, TSLA:5, MSFT:2">
+                </div>
 
-    <button onclick="getWatchlist()">Get Watchlist</button>
-    <button onclick="getWatchlistData()">Get Watchlist Data</button>
-    <button onclick="getWatchlistAnalytics()">Get Watchlist Analytics</button>
-    <button onclick="addTickers()">Add Tickers</button>
-    <button onclick="removeTickers()">Remove Tickers</button>
+                <div class="button-group">
+                    <button class="secondary" onclick="addToWatchlist()">➕ Add Tickers</button>
+                    <button class="danger" onclick="removeFromWatchlist()">➖ Remove Tickers</button>
+                </div>
+            </div>
 
-    <pre id="response">Response will appear here...</pre>
+            <div class="section">
+                <h3>📈 Stock Data</h3>
+                <div class="note">
+                    <strong>Note:</strong> Stock endpoints don't require authentication. Get real-time data from Yahoo Finance.
+                </div>
+
+                <div class="form-group">
+                    <label for="stockTicker">Stock Ticker:</label>
+                    <input type="text" id="stockTicker" placeholder="e.g. AAPL, TSLA, MSFT, GOOGL">
+                </div>
+
+                <div class="button-group">
+                    <button onclick="getStockData()">💰 Get Stock Data</button>
+                    <button onclick="getStockHistory()">📅 Get History</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="response-section">
+            <h3>📤 API Response</h3>
+            <pre id="response">Click any button above to test the API endpoints...</pre>
+        </div>
+
+        <div class="back-link">
+            <a href="/">← Back to Home</a>
+        </div>
+    </div>
 
     <script>
         function getHeaders() {
@@ -63,8 +254,12 @@
             };
         }
 
+        function getBaseUrl() {
+            return document.getElementById('baseUrl').value.replace(/\/$/, '');
+        }
+
         function parseTickers() {
-            const input = document.getElementById('tickers').value;
+            const input = document.getElementById('watchlistTickers').value;
             return input
                 .split(',')
                 .map(t => t.trim())
@@ -77,112 +272,127 @@
                 });
         }
 
-        async function handleResponse(res) {
+        async function handleResponse(response, endpoint) {
             const output = document.getElementById('response');
-            const text = await res.text();
+            const text = await response.text();
+
+            let displayText = `Endpoint: ${endpoint}\nStatus: ${response.status} ${response.statusText}\n\n`;
 
             try {
                 const json = JSON.parse(text);
-                output.textContent = JSON.stringify(json, null, 2);
+                displayText += JSON.stringify(json, null, 2);
             } catch {
-                output.textContent = text;
+                displayText += text;
             }
+
+            output.textContent = displayText;
+            output.className = response.ok ? 'success' : 'error';
         }
 
-        async function getWatchlist() {
-            const endpoint = document.getElementById('endpoint').value;
+        async function makeRequest(endpoint, options = {}) {
+            const output = document.getElementById('response');
+            output.textContent = 'Loading...';
+            output.className = 'loading';
 
             try {
-                const res = await fetch(endpoint, {
-                    method: "GET",
-                    headers: getHeaders()
-                });
-
-                await handleResponse(res);
+                const response = await fetch(endpoint, options);
+                await handleResponse(response, endpoint);
             } catch (err) {
-                document.getElementById('response').textContent = err.message;
+                output.textContent = `Error: ${err.message}`;
+                output.className = 'error';
             }
         }
 
+        // Watchlist functions
+        async function getWatchlist() {
+            const baseUrl = getBaseUrl();
+            await makeRequest(`${baseUrl}/watchlist/`, {
+                method: "GET",
+                headers: getHeaders()
+            });
+        }
 
         async function getWatchlistData() {
-            let endpoint = document.getElementById('endpoint').value;
-
-            if (!endpoint.endsWith('/')) {
-                endpoint += '/';
-            }
-
-            endpoint += 'data/';
-            console.log(endpoint)
-            try {
-                const res = await fetch(endpoint, {
-                    method: "GET",
-                    headers: getHeaders()
-                });
-
-                await handleResponse(res);
-            } catch (err) {
-                document.getElementById('response').textContent = err.message;
-            }
+            const baseUrl = getBaseUrl();
+            await makeRequest(`${baseUrl}/watchlist/data`, {
+                method: "GET",
+                headers: getHeaders()
+            });
         }
-
 
         async function getWatchlistAnalytics() {
-            let endpoint = document.getElementById('endpoint').value;
-
-            if (!endpoint.endsWith('/')) {
-                endpoint += '/';
-            }
-
-            endpoint += 'analytics/';
-            console.log(endpoint)
-            try {
-                const res = await fetch(endpoint, {
-                    method: "GET",
-                    headers: getHeaders()
-                });
-
-                await handleResponse(res);
-            } catch (err) {
-                document.getElementById('response').textContent = err.message;
-            }
+            const baseUrl = getBaseUrl();
+            await makeRequest(`${baseUrl}/watchlist/analytics`, {
+                method: "GET",
+                headers: getHeaders()
+            });
         }
-        async function addTickers() {
-            const endpoint = document.getElementById('endpoint').value;
+
+        async function addToWatchlist() {
+            const baseUrl = getBaseUrl();
             const items = parseTickers();
 
-            try {
-                const res = await fetch(endpoint + "add", {
-                    method: "POST",
-                    headers: getHeaders(),
-                    body: JSON.stringify({ items })
-                });
-
-                await handleResponse(res);
-            } catch (err) {
-                document.getElementById('response').textContent = err.message;
+            if (items.length === 0) {
+                document.getElementById('response').textContent = 'Please enter at least one ticker to add.';
+                document.getElementById('response').className = 'error';
+                return;
             }
+
+            await makeRequest(`${baseUrl}/watchlist/add`, {
+                method: "POST",
+                headers: getHeaders(),
+                body: JSON.stringify({ items })
+            });
         }
 
-        async function removeTickers() {
-            const endpoint = document.getElementById('endpoint').value;
+        async function removeFromWatchlist() {
+            const baseUrl = getBaseUrl();
             const items = parseTickers();
             const tickers = items.map(item => item.ticker);
 
-            try {
-                const res = await fetch(endpoint + "remove", {
-                    method: "DELETE",
-                    headers: getHeaders(),
-                    body: JSON.stringify({ tickers })
-                });
-
-                await handleResponse(res);
-            } catch (err) {
-                document.getElementById('response').textContent = err.message;
+            if (tickers.length === 0) {
+                document.getElementById('response').textContent = 'Please enter at least one ticker to remove.';
+                document.getElementById('response').className = 'error';
+                return;
             }
+
+            await makeRequest(`${baseUrl}/watchlist/remove`, {
+                method: "DELETE",
+                headers: getHeaders(),
+                body: JSON.stringify({ tickers })
+            });
+        }
+
+        // Stock functions
+        async function getStockData() {
+            const baseUrl = getBaseUrl();
+            const ticker = document.getElementById('stockTicker').value.trim().toUpperCase();
+
+            if (!ticker) {
+                document.getElementById('response').textContent = 'Please enter a stock ticker.';
+                document.getElementById('response').className = 'error';
+                return;
+            }
+
+            await makeRequest(`${baseUrl}/stocks/${ticker}`, {
+                method: "GET"
+            });
+        }
+
+        async function getStockHistory() {
+            const baseUrl = getBaseUrl();
+            const ticker = document.getElementById('stockTicker').value.trim().toUpperCase();
+
+            if (!ticker) {
+                document.getElementById('response').textContent = 'Please enter a stock ticker.';
+                document.getElementById('response').className = 'error';
+                return;
+            }
+
+            await makeRequest(`${baseUrl}/stocks/${ticker}/history`, {
+                method: "GET"
+            });
         }
     </script>
-
 </body>
-
 </html>
