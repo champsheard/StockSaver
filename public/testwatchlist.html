@@ -1,129 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Watchlist API Tester</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background: #f4f4f4;
-    }
-    input, button {
-      padding: 10px;
-      font-size: 16px;
-      margin-top: 10px;
-      width: 100%;
-    }
-    button {
-      cursor: pointer;
-    }
-    pre {
-      background: #222;
-      color: #0f0;
-      padding: 15px;
-      margin-top: 20px;
-      overflow-x: auto;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Watchlist API Tester</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f4f4f4;
+        }
+
+        input,
+        button {
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        pre {
+            background: #222;
+            color: #0f0;
+            padding: 15px;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+    </style>
 </head>
+
 <body>
 
-  <h2>Watchlist API Tester</h2>
+    <h2>Watchlist API Tester</h2>
 
-  <label>API Key:</label>
-  <input type="text" id="apiKey" placeholder="Enter your API key here">
+    <label>API Key:</label>
+    <input type="text" id="apiKey" placeholder="Enter your API key here">
 
-  <label>Endpoint URL:</label>
-  <input type="text" id="endpoint" value="http://localhost:3000/watchlist/" />
+    <label>Endpoint URL:</label>
+    <input type="text" id="endpoint" value="http://localhost:3000/watchlist/" />
 
-  <label>Tickers (comma separated):</label>
-  <input type="text" id="tickers" placeholder="e.g. AAPL, TSLA, MSFT">
+    <label>Tickers (comma separated):</label>
+    <input type="text" id="tickers" placeholder="e.g. AAPL, TSLA, MSFT">
 
-  <button onclick="getWatchlist()">Get Watchlist</button>
-  <button onclick="addTickers()">Add Tickers</button>
-  <button onclick="removeTickers()">Remove Tickers</button>
+    <button onclick="getWatchlist()">Get Watchlist</button>
+    <button onclick="getWatchlistData()">Get Watchlist Data</button>
+    <button onclick="addTickers()">Add Tickers</button>
+    <button onclick="removeTickers()">Remove Tickers</button>
 
-  <pre id="response">Response will appear here...</pre>
+    <pre id="response">Response will appear here...</pre>
 
-  <script>
-    function getHeaders() {
-      const apiKey = document.getElementById('apiKey').value;
-      return {
-        "Authorization": "Bearer " + apiKey,
-        "Content-Type": "application/json"
-      };
-    }
+    <script>
+        function getHeaders() {
+            const apiKey = document.getElementById('apiKey').value;
+            return {
+                "Authorization": "Bearer " + apiKey,
+                "Content-Type": "application/json"
+            };
+        }
 
-    function parseTickers() {
-      const input = document.getElementById('tickers').value;
-      return input
-        .split(',')
-        .map(t => t.trim().toUpperCase())
-        .filter(t => t.length > 0);
-    }
+        function parseTickers() {
+            const input = document.getElementById('tickers').value;
+            return input
+                .split(',')
+                .map(t => t.trim().toUpperCase())
+                .filter(t => t.length > 0);
+        }
 
-    async function handleResponse(res) {
-      const output = document.getElementById('response');
-      const text = await res.text();
+        async function handleResponse(res) {
+            const output = document.getElementById('response');
+            const text = await res.text();
 
-      try {
-        const json = JSON.parse(text);
-        output.textContent = JSON.stringify(json, null, 2);
-      } catch {
-        output.textContent = text;
-      }
-    }
+            try {
+                const json = JSON.parse(text);
+                output.textContent = JSON.stringify(json, null, 2);
+            } catch {
+                output.textContent = text;
+            }
+        }
 
-    async function getWatchlist() {
-      const endpoint = document.getElementById('endpoint').value;
+        async function getWatchlist() {
+            const endpoint = document.getElementById('endpoint').value;
 
-      try {
-        const res = await fetch(endpoint, {
-          method: "GET",
-          headers: getHeaders()
-        });
+            try {
+                const res = await fetch(endpoint, {
+                    method: "GET",
+                    headers: getHeaders()
+                });
 
-        await handleResponse(res);
-      } catch (err) {
-        document.getElementById('response').textContent = err.message;
-      }
-    }
+                await handleResponse(res);
+            } catch (err) {
+                document.getElementById('response').textContent = err.message;
+            }
+        }
 
-    async function addTickers() {
-      const endpoint = document.getElementById('endpoint').value;
-      const tickers = parseTickers();
 
-      try {
-        const res = await fetch(endpoint + "add", {
-          method: "POST",
-          headers: getHeaders(),
-          body: JSON.stringify({ tickers })
-        });
+        async function getWatchlistData() {
+            let endpoint = document.getElementById('endpoint').value;
 
-        await handleResponse(res);
-      } catch (err) {
-        document.getElementById('response').textContent = err.message;
-      }
-    }
+            if (!endpoint.endsWith('/')) {
+                endpoint += '/';
+            }
 
-    async function removeTickers() {
-    const endpoint = document.getElementById('endpoint').value;
-    const tickers = parseTickers();
+            endpoint += 'data/';
+            console.log(endpoint)
+            try {
+                const res = await fetch(endpoint, {
+                    method: "GET",
+                    headers: getHeaders()
+                });
 
-    try {
-      const res = await fetch(endpoint + "remove", {
-        method: "DELETE",
-        headers: getHeaders(),
-        body: JSON.stringify({ tickers })
-      });
+                await handleResponse(res);
+            } catch (err) {
+                document.getElementById('response').textContent = err.message;
+            }
+        }
 
-      await handleResponse(res);
-    } catch (err) {
-      document.getElementById('response').textContent = err.message;
-    }
-  }
-  </script>
+        async function addTickers() {
+            const endpoint = document.getElementById('endpoint').value;
+            const tickers = parseTickers();
+
+            try {
+                const res = await fetch(endpoint + "add", {
+                    method: "POST",
+                    headers: getHeaders(),
+                    body: JSON.stringify({ tickers })
+                });
+
+                await handleResponse(res);
+            } catch (err) {
+                document.getElementById('response').textContent = err.message;
+            }
+        }
+
+        async function removeTickers() {
+            const endpoint = document.getElementById('endpoint').value;
+            const tickers = parseTickers();
+
+            try {
+                const res = await fetch(endpoint + "remove", {
+                    method: "DELETE",
+                    headers: getHeaders(),
+                    body: JSON.stringify({ tickers })
+                });
+
+                await handleResponse(res);
+            } catch (err) {
+                document.getElementById('response').textContent = err.message;
+            }
+        }
+    </script>
 
 </body>
+
 </html>
