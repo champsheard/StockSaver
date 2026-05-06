@@ -43,11 +43,12 @@
     <label>Endpoint URL:</label>
     <input type="text" id="endpoint" value="http://localhost:3000/watchlist/" />
 
-    <label>Tickers (comma separated):</label>
-    <input type="text" id="tickers" placeholder="e.g. AAPL, TSLA, MSFT">
+    <label>Tickers with Shares (format: TICKER:SHARES, e.g. AAPL:10, TSLA:5, MSFT):</label>
+    <input type="text" id="tickers" placeholder="e.g. AAPL:10, TSLA:5, MSFT">
 
     <button onclick="getWatchlist()">Get Watchlist</button>
     <button onclick="getWatchlistData()">Get Watchlist Data</button>
+    <button onclick="getWatchlistAnalytics()">Get Watchlist Analytics</button>
     <button onclick="addTickers()">Add Tickers</button>
     <button onclick="removeTickers()">Remove Tickers</button>
 
@@ -66,8 +67,14 @@
             const input = document.getElementById('tickers').value;
             return input
                 .split(',')
-                .map(t => t.trim().toUpperCase())
-                .filter(t => t.length > 0);
+                .map(t => t.trim())
+                .filter(t => t.length > 0)
+                .map(t => {
+                    const parts = t.split(':');
+                    const ticker = parts[0].toUpperCase().trim();
+                    const shares = parts[1] ? parseInt(parts[1].trim()) || 1 : 1;
+                    return { ticker, shares };
+                });
         }
 
         async function handleResponse(res) {
@@ -119,15 +126,36 @@
             }
         }
 
+
+        async function getWatchlistAnalytics() {
+            let endpoint = document.getElementById('endpoint').value;
+
+            if (!endpoint.endsWith('/')) {
+                endpoint += '/';
+            }
+
+            endpoint += 'analytics/';
+            console.log(endpoint)
+            try {
+                const res = await fetch(endpoint, {
+                    method: "GET",
+                    headers: getHeaders()
+                });
+
+                await handleResponse(res);
+            } catch (err) {
+                document.getElementById('response').textContent = err.message;
+            }
+        }
         async function addTickers() {
             const endpoint = document.getElementById('endpoint').value;
-            const tickers = parseTickers();
+            const items = parseTickers();
 
             try {
                 const res = await fetch(endpoint + "add", {
                     method: "POST",
                     headers: getHeaders(),
-                    body: JSON.stringify({ tickers })
+                    body: JSON.stringify({ items })
                 });
 
                 await handleResponse(res);
@@ -138,7 +166,8 @@
 
         async function removeTickers() {
             const endpoint = document.getElementById('endpoint').value;
-            const tickers = parseTickers();
+            const items = parseTickers();
+            const tickers = items.map(item => item.ticker);
 
             try {
                 const res = await fetch(endpoint + "remove", {
