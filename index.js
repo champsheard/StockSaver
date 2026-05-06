@@ -4,6 +4,8 @@ const dotenv = require('dotenv').config();
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const MarkdownIt = require('markdown-it');
+const md = new MarkdownIt();
 
 app.use(cors({
   origin: '*',
@@ -31,16 +33,15 @@ app.use('/watchlist', watchlistRouter);
 const stockRouter = require('./routes/stockRoutes');
 app.use('/stocks', stockRouter);
 
-app.get("/docs", async (req, res) => {
+app.get("/docs", (req, res) => {
   const filePath = path.join(__dirname, "DOCS.md");
 
-  fs.readFile(filePath, "utf-8", async (err, data) => {
+  fs.readFile(filePath, "utf-8", (err, data) => {
     if (err) {
       return res.status(500).send("Error loading docs");
     }
 
-    const { marked } = await import("marked");
-    const html = marked.parse(data);
+    const html = md.render(data);
 
     res.send(`
       <!DOCTYPE html>

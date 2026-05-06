@@ -5,6 +5,9 @@
     { "src": "public/**/*", "use": "@vercel/static" }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "/index.js" }
+    { "src": "/auth/(.*)", "dest": "/index.js" },
+    { "src": "/watchlist/(.*)", "dest": "/index.js" },
+    { "src": "/stocks/(.*)", "dest": "/index.js" },
+    { "src": "/docs", "dest": "/index.js" }
   ]
 }
