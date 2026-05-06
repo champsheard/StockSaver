@@ -29,7 +29,7 @@ exports.getProfile = (req, res) => {
         const user = getUserByApiKey(id);
         res.status(200).json({ 
             username: user.username,
-            watchlist: user.watchlist
+            apiKey: user.apiKey
         });
         console.log(`Profile retrieved for API key: ${id}`);
     } catch (err) {
