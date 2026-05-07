@@ -18,7 +18,7 @@ StockSaver makes it easy to track tickers and manage your watchlist with a clean
 - **CORS Enabled**: Easy integration with web applications
 - **Interactive Docs**: Built-in documentation
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Try It Out
 Visit the live API: **[https://stocksaver.euwainsheard.com](https://stocksaver.euwainsheard.com)**
@@ -114,7 +114,7 @@ Visit `/docs` endpoint to view the full API documentation with examples.
 - **Rate Limiting**: express-rate-limit
 - **CORS**: Enabled for cross-origin requests
 
-## 📋 Dependencies
+## Dependencies
 
 - `express` - Web framework
 - `yahoo-finance2` - Stock data fetching
@@ -124,7 +124,7 @@ Visit `/docs` endpoint to view the full API documentation with examples.
 - `dotenv` - Environment variable management
 
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
