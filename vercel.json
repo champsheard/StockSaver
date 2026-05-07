@@ -1,16 +1,11 @@
 {
   "version": 2,
   "builds": [
-    { "src": "index.js", "use": "@vercel/node" },
-    { "src": "public/**/*", "use": "@vercel/static" }
+    { "src": "index.js", "use": "@vercel/node" }
   ],
   "routes": [
-    { "handle": "filesystem" },
-    { "src": "/api-key", "dest": "/api-key.html" },
-    { "src": "/testwatchlist", "dest": "/testwatchlist.html" },
-    { "src": "/auth/(.*)", "dest": "/index.js" },
-    { "src": "/watchlist/(.*)", "dest": "/index.js" },
-    { "src": "/stocks/(.*)", "dest": "/index.js" },
-    { "src": "/docs", "dest": "/index.js" }
+    { "src": "/(.*)", "dest": "/index.js" }
   ]
 }
+
+
