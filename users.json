@@ -1,0 +1,52 @@
+{
+    "users": {
+        "fb2741468e2f96304cf4c30c413348c897decc5ece4a3da00ee4584b516ddfa6": {
+            "username": "adsf",
+            "apiKey": "fb2741468e2f96304cf4c30c413348c897decc5ece4a3da00ee4584b516ddfa6",
+            "watchlist": [
+                {
+                    "ticker": "TSLA",
+                    "shares": 1
+                },
+                {
+                    "ticker": "GOOGL",
+                    "shares": 1
+                },
+                {
+                    "ticker": "AAPL",
+                    "shares": 105
+                }
+            ]
+        },
+        "ec410113098cfe0da48eea354eeefd3edeca4223308e01c7c8123b4897e4867e": {
+            "username": "asdf",
+            "apiKey": "ec410113098cfe0da48eea354eeefd3edeca4223308e01c7c8123b4897e4867e",
+            "watchlist": []
+        },
+        "2bc8b0f26b1cf03a016fa74918737436b97a6637d78eac10fe82a6322aa9aedf": {
+            "username": "asdff",
+            "apiKey": "2bc8b0f26b1cf03a016fa74918737436b97a6637d78eac10fe82a6322aa9aedf",
+            "watchlist": []
+        },
+        "ac45cf5c6ba4aa3e673f2d24db5b2673013f2978892590176fe0a7a0c663e058": {
+            "username": "asdfg",
+            "apiKey": "ac45cf5c6ba4aa3e673f2d24db5b2673013f2978892590176fe0a7a0c663e058",
+            "watchlist": []
+        },
+        "c0828d690158461573edf5bc17d0f6c32fdcab513bfc908dafb94fc729da2430": {
+            "username": "adfff",
+            "apiKey": "c0828d690158461573edf5bc17d0f6c32fdcab513bfc908dafb94fc729da2430",
+            "watchlist": []
+        },
+        "3109dc1ab1c8c51495d64dd43c80b9202c65b150a12d8b14bfdd3b80410f630d": {
+            "username": "adf1",
+            "apiKey": "3109dc1ab1c8c51495d64dd43c80b9202c65b150a12d8b14bfdd3b80410f630d",
+            "watchlist": [
+                {
+                    "ticker": "AAPL",
+                    "shares": 10
+                }
+            ]
+        }
+    }
+}
