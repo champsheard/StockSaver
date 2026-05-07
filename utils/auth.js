@@ -1,16 +1,40 @@
 const crypto = require('crypto');
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 
-const filepath = path.join(__dirname, '../users.json');
+const localFile = path.join(__dirname, '../users.json');
+const runtimeFile = path.join(os.tmpdir(), 'stocksaver-users.json');
+
+const getDbPath = () => {
+    if (process.env.VERCEL === '1' || process.env.NODE_ENV === 'production') {
+        if (!fs.existsSync(runtimeFile)) {
+            if (fs.existsSync(localFile)) {
+                fs.copyFileSync(localFile, runtimeFile);
+            } else {
+                fs.writeFileSync(runtimeFile, JSON.stringify({ users: {} }, null, 4), 'utf-8');
+            }
+        }
+        return runtimeFile;
+    }
+
+    return localFile;
+};
 
 const readDB = () => {
-    const rawData = fs.readFileSync(filepath, "utf-8");
-    return JSON.parse(rawData);
+    const filepath = getDbPath();
+
+    if (!fs.existsSync(filepath)) {
+        fs.writeFileSync(filepath, JSON.stringify({ users: {} }, null, 4), 'utf-8');
+    }
+
+    const rawData = fs.readFileSync(filepath, 'utf-8');
+    return JSON.parse(rawData || '{"users":{}}');
 };
 
 const writeDB = (db) => {
-    fs.writeFileSync(filepath, JSON.stringify(db, null, 4), "utf-8");
+    const filepath = getDbPath();
+    fs.writeFileSync(filepath, JSON.stringify(db, null, 4), 'utf-8');
 };
 
 const createUser = (username) => {
