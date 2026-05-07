@@ -4,9 +4,9 @@
 [![Express](https://img.shields.io/badge/Express-5.2.1-blue.svg)](https://expressjs.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**A powerful and simple API for tracking stocks and managing watchlists**
+**A simple stock watchlist API with real-time quotes, analytics, and secure API key access.**
 
-StockSaver is a RESTful API built with Node.js and Express that allows users to create personalized stock watchlists, fetch real-time stock data, and analyze portfolio performance. Powered by Yahoo Finance for accurate market data.
+StockSaver makes it easy to track tickers and manage your watchlist with a clean REST interface.
 
 ## Features
 
