@@ -9,10 +9,9 @@ const md = new MarkdownIt();
 
 app.use(cors({
   origin: '*',
-  methods: ['GET', 'POST', 'OPTIONS', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  methods: '*',
+  allowedHeaders: '*'
 }));
-
 
 app.use(express.json());
 
