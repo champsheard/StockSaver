@@ -105,14 +105,14 @@ exports.addToWatchlist = async (req, res) => {
 
     const { items, tickers } = req.body;
 
-    let inputItems = items || tickers;
+    const inputItems = items || tickers;
 
     if (!Array.isArray(inputItems) || inputItems.length === 0) {
       return res.status(400).json({ error: "Items or tickers must be a non-empty array" });
     }
 
     // Normalize items to {ticker, shares}
-    const normalizedItems = items.map(item => {
+    const normalizedItems = inputItems.map(item => {
       if (typeof item === 'string') {
         return { ticker: item.toUpperCase().trim(), shares: 1 };
       } else {
